@@ -23,7 +23,14 @@ snake[0] = {
 
 document.addEventListener("keydown", direction);
 
-const direction = e =>
+let dir;
+
+const direction = (event) => {
+  if (e.keyCode === 37 && dir !== "right") dir = "left";
+  else if (e.keyCode === 38 && dir !== "down") dir = "up";
+  else if (e.keyCode === 39 && dir !== "left") dir = "right";
+  else if (e.keyCode === 40 && dir !== "up") dir = "down";
+};
 
 const drawGame = () => {
   ctx.drawImage(ground, 0, 0);
@@ -36,6 +43,23 @@ const drawGame = () => {
   ctx.fillStyle = "white";
   ctx.font = "50px Arial";
   ctx.fillText(`score: ${score}`, box * 6, box * 1.6);
+
+  let snakeX = snake[0].x;
+  let snakeY = snake[0].y;
+
+  snake.pop();
+
+  if (dir === "left") snakeX -= box;
+  if (dir === "right") snakeX += box;
+  if (dir === "up") snakeY -= box;
+  if (dir === "down") snakeY += box;
+
+  const newHead = {
+    x: snakeX,
+    y: snakeY,
+  };
+
+  snake.unshift(newHead);
 };
 
 let game = setInterval(drawGame, 100);
